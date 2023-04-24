@@ -1,5 +1,6 @@
 package com.cl3t4p.lib.chatlib;
 
+import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.command.CommandSender;
 import org.bukkit.configuration.ConfigurationSection;
@@ -73,8 +74,11 @@ public class Messenger {
 
     public void sendMsg(String key, Player player, Map<String, Object> data) {
         String string = message_map.get(key);
-        if (string == null || string.isEmpty())
+        if (string == null || string.isEmpty()){
+            Bukkit.getLogger().warning("String key "+key+" does not exists!!");
+            Bukkit.getLogger().warning("Please check the configs");
             return;
+        }
 
         Sender sender = SenderFactory.getSender(string);
         if (sender == null) {
@@ -104,8 +108,11 @@ public class Messenger {
 
     public void sendRaw(String key, CommandSender reciver, Map<String, Object> data) {
         String string = message_map.get(key);
-        if (string == null || string.isEmpty())
+        if (string == null || string.isEmpty()){
+            Bukkit.getLogger().warning("String key "+key+" does not exists!!");
+            Bukkit.getLogger().warning("Please check the configs");
             return;
+        }
 
         if (SenderFactory.getSender(string) != null) {
             string = string.substring(2);
