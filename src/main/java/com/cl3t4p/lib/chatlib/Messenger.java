@@ -1,6 +1,7 @@
 package com.cl3t4p.lib.chatlib;
 
 import org.bukkit.ChatColor;
+import org.bukkit.command.CommandSender;
 import org.bukkit.configuration.ConfigurationSection;
 import org.bukkit.configuration.file.YamlConfiguration;
 import org.bukkit.entity.Player;
@@ -58,16 +59,16 @@ public class Messenger {
         return message_map.get(key);
     }
 
-    public void sendMsg(String key, Map<String, Object> data) {
+    public void broadcast(String key, Map<String, Object> data) {
         sendMsg(key, null, data);
-    }
-
-    public void sendMsg(String key, Player player) {
-        sendMsg(key, player, null);
     }
 
     public void broadcast(String key) {
         sendMsg(key, null, null);
+    }
+
+    public void sendMsg(String key, Player player) {
+        sendMsg(key, player, null);
     }
 
     public void sendMsg(String key, Player player, Map<String, Object> data) {
@@ -95,6 +96,34 @@ public class Messenger {
 
         sender.send(player, color(string));
     }
+
+
+    public void sendRaw(String key, CommandSender reciver) {
+        sendRaw(key,reciver,null);
+    }
+
+    public void sendRaw(String key, CommandSender reciver, Map<String, Object> data) {
+        String string = message_map.get(key);
+        if (string == null || string.isEmpty())
+            return;
+
+        if (SenderFactory.getSender(string) != null) {
+            string = string.substring(2);
+        }
+
+        if (data != null) {
+            for (Map.Entry<String, Object> entry : data.entrySet()) {
+                String symbol = "%" + entry.getKey() + "%";
+                if (string.contains(symbol)) {
+                    string = string.replaceAll(symbol, entry.getValue().toString());
+                }
+            }
+        }
+        reciver.sendMessage(color(string));
+    }
+
+
+
 
 
 }
