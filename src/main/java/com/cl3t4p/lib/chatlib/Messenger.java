@@ -48,6 +48,10 @@ public class Messenger {
         return matcher.appendTail(buffer).toString();
     }
 
+    public HashMap<String, String> getMessage_map() {
+        return message_map;
+    }
+
     public void addMessage(String key, String value) {
         message_map.put(key, value);
     }
@@ -127,6 +131,31 @@ public class Messenger {
             }
         }
         reciver.sendMessage(color(string));
+    }
+
+
+    public String getColoMessage(String key){
+        return getColoMessage(key,null);
+    }
+    public String getColoMessage(String key, Map<String, Object> data){
+        String string = message_map.get(key);
+        if (string == null || string.isEmpty()){
+            Bukkit.getLogger().warning("String key "+key+" does not exists!!");
+            Bukkit.getLogger().warning("Please check the configs");
+            return "Missing key";
+        }
+        if (SenderFactory.getSender(string) != null) {
+            string = string.substring(2);
+        }
+        if (data != null) {
+            for (Map.Entry<String, Object> entry : data.entrySet()) {
+                String symbol = "%" + entry.getKey() + "%";
+                if (string.contains(symbol)) {
+                    string = string.replaceAll(symbol, entry.getValue().toString());
+                }
+            }
+        }
+        return color(string);
     }
 
 
