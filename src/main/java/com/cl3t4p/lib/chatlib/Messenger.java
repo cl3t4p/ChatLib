@@ -36,7 +36,7 @@ public class Messenger {
 
     public static String translateHexColorCodes(String message) {
         Matcher matcher = HEX_PATTERN.matcher(message);
-        StringBuffer buffer = new StringBuffer(message.length() + 4 * 8);
+        StringBuilder buffer = new StringBuilder(message.length() + 4 * 8);
         while (matcher.find()) {
             String group = matcher.group(1);
             matcher.appendReplacement(buffer, COLOR_CHAR + "x"
@@ -78,8 +78,8 @@ public class Messenger {
 
     public void sendMsg(String key, Player player, Map<String, Object> data) {
         String string = message_map.get(key);
-        if (string == null || string.isEmpty()){
-            Bukkit.getLogger().warning("String key "+key+" does not exists!!");
+        if (string == null || string.isEmpty()) {
+            Bukkit.getLogger().warning("String key " + key + " does not exists!!");
             Bukkit.getLogger().warning("Please check the configs");
             return;
         }
@@ -91,6 +91,14 @@ public class Messenger {
             string = string.substring(2);
         }
 
+        string = replaceString(data, string);
+        if (string.contains("%player%"))
+            string = string.replaceAll("%player%", player.getName());
+
+        sender.send(player, color(string));
+    }
+
+    private String replaceString(Map<String, Object> data, String string) {
         if (data != null) {
             for (Map.Entry<String, Object> entry : data.entrySet()) {
                 String symbol = "%" + entry.getKey() + "%";
@@ -99,21 +107,18 @@ public class Messenger {
                 }
             }
         }
-        if (string.contains("%player%"))
-            string = string.replaceAll("%player%", player.getName());
-
-        sender.send(player, color(string));
+        return string;
     }
 
 
     public void sendRaw(String key, CommandSender reciver) {
-        sendRaw(key,reciver,null);
+        sendRaw(key, reciver, null);
     }
 
     public void sendRaw(String key, CommandSender reciver, Map<String, Object> data) {
         String string = message_map.get(key);
-        if (string == null || string.isEmpty()){
-            Bukkit.getLogger().warning("String key "+key+" does not exists!!");
+        if (string == null || string.isEmpty()) {
+            Bukkit.getLogger().warning("String key " + key + " does not exists!!");
             Bukkit.getLogger().warning("Please check the configs");
             return;
         }
@@ -122,44 +127,28 @@ public class Messenger {
             string = string.substring(2);
         }
 
-        if (data != null) {
-            for (Map.Entry<String, Object> entry : data.entrySet()) {
-                String symbol = "%" + entry.getKey() + "%";
-                if (string.contains(symbol)) {
-                    string = string.replaceAll(symbol, entry.getValue().toString());
-                }
-            }
-        }
+        string = replaceString(data, string);
         reciver.sendMessage(color(string));
     }
 
 
-    public String getColoMessage(String key){
-        return getColoMessage(key,null);
+    public String getColorMessage(String key) {
+        return getColorMessage(key, null);
     }
-    public String getColoMessage(String key, Map<String, Object> data){
+
+    public String getColorMessage(String key, Map<String, Object> data) {
         String string = message_map.get(key);
-        if (string == null || string.isEmpty()){
-            Bukkit.getLogger().warning("String key "+key+" does not exists!!");
+        if (string == null || string.isEmpty()) {
+            Bukkit.getLogger().warning("String key " + key + " does not exists!!");
             Bukkit.getLogger().warning("Please check the configs");
             return "Missing key";
         }
         if (SenderFactory.getSender(string) != null) {
             string = string.substring(2);
         }
-        if (data != null) {
-            for (Map.Entry<String, Object> entry : data.entrySet()) {
-                String symbol = "%" + entry.getKey() + "%";
-                if (string.contains(symbol)) {
-                    string = string.replaceAll(symbol, entry.getValue().toString());
-                }
-            }
-        }
+        string = replaceString(data, string);
         return color(string);
     }
-
-
-
 
 
 }
