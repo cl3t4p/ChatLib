@@ -60,6 +60,6 @@ A small library for sending messages to Minecraft players using factories and pl
 #T: title
 #I: item
 
-player_fish: "#T&7Hai pescato un &6%fish%&7 !"
-player_fish_no_fish: "#C&7Non hai pescato niente !"
+player_fish: "#T&7You caught a &6%fish%&7!"
+player_fish_no_fish: "#C&7You caught nothing!"
 ````
