@@ -15,12 +15,13 @@ import java.util.regex.Pattern;
 
 public class Messenger {
 
+    // Hex color pattern for chat colors
     private static final Pattern HEX_PATTERN = Pattern.compile("&#([A-Fa-f0-9]{6})");
+
     private static final char COLOR_CHAR = ChatColor.COLOR_CHAR;
     HashMap<String, String> message_map = new HashMap<>();
 
     public Messenger() {
-
     }
 
     public Messenger(File file) {
@@ -31,9 +32,15 @@ public class Messenger {
     }
 
     public static String color(String string) {
+        // Translate the color codes
         return ChatColor.translateAlternateColorCodes('&', translateHexColorCodes(string));
     }
 
+    /**
+     * Translate the hex color codes to the chat color codes
+     * @param message the message to translate
+     * @return the translated message
+     */
     public static String translateHexColorCodes(String message) {
         Matcher matcher = HEX_PATTERN.matcher(message);
         StringBuilder buffer = new StringBuilder(message.length() + 4 * 8);
@@ -76,6 +83,15 @@ public class Messenger {
         sendMsg(key, player, null);
     }
 
+    /**
+     * Send a message to a player
+     * @param key the key of the message
+     * @param player the player to send the message if null the message will be broadcasted
+     * @param data the data to replace in the message (key, value) like ("level", "13")
+     * 
+     * %player% will be replaced by the player name
+     * 
+     */
     public void sendMsg(String key, Player player, Map<String, Object> data) {
         String string = message_map.get(key);
         if (string == null || string.isEmpty()) {
@@ -84,6 +100,7 @@ public class Messenger {
             return;
         }
 
+        // Get sender factory default chat
         Sender sender = SenderFactory.getSender(string);
         if (sender == null) {
             sender = SenderFactory.getSender("#C");
@@ -91,6 +108,7 @@ public class Messenger {
             string = string.substring(2);
         }
 
+        // Replace the data in the string
         string = replaceString(data, string);
         if (string.contains("%player%"))
             string = string.replaceAll("%player%", player.getName());
@@ -132,10 +150,21 @@ public class Messenger {
     }
 
 
+    /**
+     * Get a colored string of the message
+     * @param key the key of the message
+     */
     public String getColorMessage(String key) {
         return getColorMessage(key, null);
     }
 
+    /**
+     * Get a colored string of the message with data
+     * @param key the key of the message
+     * @param data the data to replace in the message (key, value) like ("level", "13")
+     * 
+     * %player% will be replaced by the player name
+     */
     public String getColorMessage(String key, Map<String, Object> data) {
         String string = message_map.get(key);
         if (string == null || string.isEmpty()) {

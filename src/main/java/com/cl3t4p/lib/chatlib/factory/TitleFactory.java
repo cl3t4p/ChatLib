@@ -11,6 +11,10 @@ import java.util.Set;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
+/**
+ * TitleFactory class
+ * Format: #T=fadeIn=stay=fadeOut
+ */
 public class TitleFactory extends SenderFactory {
 
     protected final Pattern pattern = Pattern.compile("#(\\w+)=(\\w+)");

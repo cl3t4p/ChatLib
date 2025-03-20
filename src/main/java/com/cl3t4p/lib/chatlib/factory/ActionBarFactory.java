@@ -6,7 +6,7 @@ import net.md_5.bungee.api.ChatMessageType;
 import net.md_5.bungee.api.chat.TextComponent;
 import org.bukkit.entity.Player;
 
-public class ActionBarFactory extends SenderFactory implements Sender {
+public class ActionBarFactory extends SenderFactory {
     public ActionBarFactory() {
         super('A');
     }
