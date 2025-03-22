@@ -41,7 +41,7 @@ A small library for sending messages to Minecraft players using factories and pl
 
 
     @EventHandler
-    public void fish(PlayerFishEvent event){
+    public void fishEvent(PlayerFishEvent event){
         // Send message to player when he catches a fish with the type of fish
         Player player = event.getPlayer();
         if (event.getCaught() != null) {
