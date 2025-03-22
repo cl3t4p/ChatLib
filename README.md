@@ -32,10 +32,12 @@ A small library for sending messages to Minecraft players using factories and pl
 
 ```java
     //Setup
+
+    Messenger messenger;
     @Override
     public void onEnable(){
         File msg = new File(getDataFolder(),"msg.yml");
-        Messenger messenger = new Messenger(msg);
+        messenger = new Messenger(msg);
     }
 
 
